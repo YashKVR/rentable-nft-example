@@ -9,11 +9,24 @@ const hre = require("hardhat");
 async function main() {
   const rentablePets = await hre.ethers.deployContract("RentablePets");
 
-  await rentablePets.waitForDeployment();
+  const RentablePets = await rentablePets.waitForDeployment();
 
   console.log(
-    `Contract deployed to ${rentablePets.target}`
+    `Contract deployed to ${RentablePets.target}`
   );
+
+  if (network.config.chainId == 80001) {
+    console.log('Waiting 5 Block confirmations');
+    setTimeout(() => {
+      verify(RentablePets.target);
+    }, 120000);
+  }
+}
+
+async function verify(contractAddress) {
+  await hre.run('verify:verify', {
+    address: contractAddress,
+  });
 }
 
 // We recommend this pattern to be able to use async/await everywhere

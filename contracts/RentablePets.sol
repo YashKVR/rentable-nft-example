@@ -8,7 +8,11 @@ contract RentablePets is ERC4907 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    constructor() ERC4907("RentablePets", "RP") {}
+    address public owner;
+
+    constructor() ERC4907("RentablePets", "RP") {
+        owner = msg.sender;
+    }
 
     function mint(string memory _tokenURI) public {
         _tokenIds.increment();
